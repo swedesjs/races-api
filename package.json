@@ -1,0 +1,29 @@
+{
+  "name": "races-api",
+  "version": "1.0.7",
+  "description": "SDK для Races API во ВКонтакте",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "swedesjs",
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^3.17.0",
+    "md5": "^2.3.0",
+    "node-fetch": "^2.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swederaces-api-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/swedesjs/races-api/issues"
+  },
+  "homepage": "https://github.com/swedesjs/races-api#readme",
+  "devDependencies": {
+    "@types/node": "^16.4.1"
+  }
+}

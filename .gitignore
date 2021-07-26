@@ -1,0 +1,8 @@
+# Dependency directories
+node_modules
+lib
+
+# files
+.npmignore
+package-lock.json
+src/test.ts

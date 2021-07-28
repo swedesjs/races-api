@@ -12,7 +12,7 @@ export interface merchatEdit {
    */
   groupId?: number
   /**
-   * Url аватара проекта, принимаются URL только от источника {@link https://imgur.com/ imgur}, и только png\jpg\jpeg форматы
+   * URL аватара проекта, принимаются URL только от источника {@link https://imgur.com/ imgur}, и только png\jpg\jpeg форматы
    */
   avatar?: string
 }
@@ -60,11 +60,11 @@ export interface paymentSend {
    */
   field: "coin" | "diamonds"
   /**
-   * Сумма перевода
+   * ID человека, которому нужно передать валюту
    */
   id: number
   /**
-   * ID человека, которому нужно передать валюту
+   * Сумма перевода
    */
   amount: number
 }

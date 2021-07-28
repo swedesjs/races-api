@@ -39,28 +39,37 @@ export class Races {
 
   /**
    * Получить входящие платежи
+   * @param handler Callback функция
+   * @param url Свой URL (по желанию)
    */
-  startPollingPayment(handler: webhooksHandler) {
+  startPollingPayment(handler: webhooksHandler, url?: string) {
     return new Promise(resolve => {
       const server = fastify()
-      server.post("/", req => {
-        const { userId, fieId, amount, id, sig } = req.body as Parameters<webhooksHandler>[0]
+      server.post("/", (req, res) => {
+        res.status(200).send("OK")
+        const { userId, field, amount, id, sig } = req.body as Parameters<webhooksHandler>[0]
         if (
           crypto
             .createHash("md5")
             .update(this.token + amount + userId + id)
             .digest("hex") === sig
         )
-          handler({ userId, fieId, amount, id, sig })
+          handler({ userId, field, amount, id, sig })
       })
-      server.listen(3000, (err, url) => {
+      server.listen(3000, (err, urls) => {
         if (err) {
           resolve(0)
           throw err
         }
-        this.webhooks.create({ url })
+        this.webhooks.create({ url: url || urls })
       })
     })
+  }
+  /**
+   * Получить ссылку на ваш проект
+   */
+  async getLink() {
+    return "https://vk.com/app7679912#pay=-" + (await this.merchant.get()).id
   }
 }
 

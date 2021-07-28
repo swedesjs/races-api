@@ -153,7 +153,7 @@ export type webhooksHandler = (callack: {
   /**
    * Валюта перевода, coin - доллары, diamonds - алмазы
    */
-  fieId: "coin" | "diamonds"
+  field: "coin" | "diamonds"
   /**
    * Сумма перевода
    */

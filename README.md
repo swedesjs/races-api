@@ -23,54 +23,7 @@ const race = new Races("token")
 const result = await race.merchant.get()
 ```
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface merchatGet {
-  /**
-   * ID создателя проекта
-   */
-  ownerVkid: number
-  /**
-   * Количество алмазов на балансе
-   */
-  diamonds: number
-  /**
-   * Количество долларов на балансе
-   */
-  coin: number
-  /**
-   * Имя
-   */
-  name: string
-  /**
-   * Описание проекта
-   */
-  description: string
-  /**
-   * URL аватара проекта
-   */
-  avatar: string
-  /**
-   * ID привязанного сообщества
-   */
-  groupId: number
-  /**
-   * Логический признак того допущен ли проект в каталог
-   */
-  isAllowed: boolean
-  /**
-   *  URL, на который поступают уведомления о платежах
-   */
-  webhookUrl: string
-  /**
-   * ID проекта, нужен для генерации ссылки на перевод
-   */
-  id: number
-}
-```
-
-</details>
+[Пример ответа](./src/api/Response.ts#L1)
 
 ### merchat.edit
 
@@ -79,23 +32,22 @@ export interface merchatGet {
 Отредактировать ваш проект
 
 ```ts
-const result = await race.merchant.edit(options)
+race.merchant.edit({
+  name: "swedesjs",
+  description: "Project description",
+  groupId: 1,
+  avatar: "https://imgur.com/letter.png"
+})
 ```
 
-| Опция        | Тип    |
-| ------------ | ------ |
-| name?        | string |
-| description? | string |
-| groupId?     | number |
-| avatar?      | string |
+| Опция        | Тип    | Описание                                                                                                            |
+| ------------ | ------ | ------------------------------------------------------------------------------------------------------------------- |
+| name?        | string | Название Вашего проекта                                                                                             |
+| description? | string | Описание Вашего проекта                                                                                             |
+| groupId?     | number | ID сообщества VK, которое принадлежит проекту                                                                       |
+| avatar?      | string | URL аватара проекта, принимаются URL только от источника [imgur](https://imgur.com/), и только png\jpg\jpeg форматы |
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface merchantEdit extends merchatGet {}
-```
-
-</details>
+[Пример ответа](./src/api/Response.ts#L44)
 
 ## payment
 
@@ -106,55 +58,20 @@ export interface merchantEdit extends merchatGet {}
 Получить историю переводов
 
 ```ts
-const result = await race.payment.getHistory(options)
+race.payment.getHistory({
+  count: 5,
+  type: "out",
+  offset: 5
+})
 ```
 
-| Опция   | Тип           |
-| ------- | ------------- |
-| count?  | number        |
-| type?   | "in" \| "out" |
-| offset? | number        |
+| Опция   | Тип           | Описание                                               |
+| ------- | ------------- | ------------------------------------------------------ |
+| count?  | number        | Количество записей, от 1 до 100, по дефолту 100        |
+| type?   | "in" \| "out" | Входящие - in, исходящие - out, по дефолту - все сразу |
+| offset? | number        | Сместить поиск на указанное количество записей         |
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface paymentGetHistory {
-  /**
-   * Длина items
-   */
-  count: number
-  items:
-    | {
-        /**
-         * ID платежа
-         */
-        id: number
-        /**
-         * ID отправляющего, ваш ID будет отрицательным
-         */
-        formId: number
-        /**
-         * ID принимающего, ваш ID будет отрицательным
-         */
-        toId: number
-        /**
-         * Сумма перевода
-         */
-        amount: number
-        /**
-         * Валюта coin - доллары, diamonds - алмазы
-         */
-        fieId: "coin" | "diamonds"
-        /**
-         * UnixTime платежа
-         */
-        date: string
-      }[]
-    | []
-}
-```
-
-</details>
+[Пример ответа](./src/api/Response.ts#L46)
 
 ### payment.getHistoryByIds
 
@@ -163,21 +80,18 @@ export interface paymentGetHistory {
 Получить информацию о платеже по его ID
 
 ```ts
-const result = await race.payment.getHistoryByIds(options)
+race.payment.getHistoryByIds({
+  ids: [1, 3],
+  type: "in"
+})
 ```
 
-| Опция | Тип                |
-| ----- | ------------------ |
-| ids   | number \| number[] |
-| type: | "in" \| "out"      |
+| Опция | Тип                | Описание                                                |
+| ----- | ------------------ | ------------------------------------------------------- |
+| ids   | number \| number[] | Список ID платежей, информацию о которых нужно получить |
+| type: | "in" \| "out"      | Входящие - in, исходящие - out, по дефолту - все сразу  |
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface paymentGetHistoryByIds extends paymentGetHistory {}
-```
-
-</details>
+[Пример ответа](./src/api/Response.ts#L81)
 
 ### payment.send
 
@@ -186,31 +100,20 @@ export interface paymentGetHistoryByIds extends paymentGetHistory {}
 Совершить перевод другому пользователю
 
 ```ts
-const result = await race.payment.send(options)
+race.payment.send({
+  field: "coin",
+  id: 1,
+  amount: 1000
+})
 ```
 
-| Опция  | Тип                  |
-| ------ | -------------------- |
-| field  | "coin" \| "diamonds" |
-| id     | number               |
-| amount | number               |
+| Опция  | Тип                  | Описание                                               |
+| ------ | -------------------- | ------------------------------------------------------ |
+| field  | "coin" \| "diamonds" | Передаваемая валюта, coin - доллары, diamonds - алмазы |
+| id     | number               | ID человека, которому нужно передать валюту            |
+| amount | number               | Сумма перевода                                         |
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface paymentSend {
-  /**
-   * Логический признак того, выполнился ли платеж успешно
-   */
-  result: boolean
-  /**
-   * ID человека, которому вы передали валюту
-   */
-  userId: number
-}
-```
-
-</details>
+[Пример ответа](./src/Response.ts#L83)
 
 ## users
 
@@ -221,54 +124,16 @@ export interface paymentSend {
 Получить информацию о пользователе
 
 ```ts
-const result = await race.users.get(options)
+race.users.get({
+  userIds: 1
+})
 ```
 
-| Опция    | Тип                |
-| -------- | ------------------ |
-| userIds? | number \| number[] |
+| Опция    | Тип                | Описание                                                                   |
+| -------- | ------------------ | -------------------------------------------------------------------------- |
+| userIds? | number \| number[] | ID пользователя или пользователей, информацию о которых Вы хотите получить |
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface usersGet {
-  /**
-   * Длина items
-   */
-  count: number
-  items:
-    | {
-        /**
-         * Количество долларов у пользователя
-         */
-        coin: number
-        /**
-         * Количество алмазов у пользователя
-         */
-        diamonds: number
-        /**
-         * Уровень пользователя
-         */
-        lvl: number
-        /**
-         * Опыт пользователя
-         */
-        xp: number
-        /**
-         * ID VK пользователя
-         */
-        vkid: number
-        /**
-         * ID VK пользователя, который пригласил текущего пользователя в игру
-         * Если referalVkid = 0, то у пользователя не указан реферальный код
-         */
-        referalVkid: number
-      }[]
-    | []
-}
-```
-
-</details>
+[Пример ответа](./src/api/Response.ts#L94)
 
 ## webhooks
 
@@ -279,28 +144,16 @@ export interface usersGet {
 Установить адрес вебхука, на который будут присылаться уведомления о новых платежах
 
 ```ts
-const result = await race.webhooks.create(options)
+race.webhooks.create({
+  url: "https://vk.com"
+})
 ```
 
-| Опция | Тип    |
-| ----- | ------ |
-| url?  | string |
-| port? | number |
+| Опция | Тип    | Описание                                                                                                                          |
+| ----- | ------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| url   | string | URL, на который будут присылаться уведомления. Должен иметь протокол http или https, может быть указан как домен, так и IP адрес. |
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface webhooksCreate {
-  /**
-   * Логический признак того, была ли привязка вебхука
-   */
-  result: boolean
-  /**
-   * Новый URL вебхука
-   */
-  url: string
-}
-```
+[Пример ответа](./src/api/Response.ts#L130)
 
 </details>
 
@@ -314,18 +167,7 @@ export interface webhooksCreate {
 const result = await race.webhooks.get()
 ```
 
-<details markdown='1'><summary>Пример ответа</summary>
-
-```ts
-export interface webhooksGet {
-  /**
-   * URL вашего вебхука
-   */
-  webhookUrl: string
-}
-```
-
-</details>
+[Пример ответа](./src/api/Response.ts#L141)
 
 # startPollingPayment
 
@@ -337,33 +179,14 @@ race.startPollingPayment(ctx => {
 })
 ```
 
-<details markdown='1'><summary>Тип параметров функции</summary>
+[Тип параметров функции](./src/api/Response.ts#L148)
+
+# getLink
+
+Получить ссылку на проект
 
 ```ts
-export type webhooksHandler = (callack: {
-  /**
-   * ID VK переводящего пользователя
-   */
-  userId: number
-  /**
-   * Валюта перевода, coin - доллары, diamonds - алмазы
-   */
-  fieId: "coin" | "diamonds"
-  /**
-   * Сумма перевода
-   */
-  amount: number
-  /**
-   * ID перевода
-   */
-  id: number
-  /**
-   * Подпись MD5-хешем (token + amount + userId + id)
-   */
-  sig: string
-}) => void
+const result = await race.getLink()
 ```
-
-</details>
 
 > Если нашли ошибку напишите [мне](https://t.me/swedesjs)

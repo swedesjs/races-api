@@ -11,6 +11,8 @@ import { Races } from "races-api"
 const race = new Races("token")
 ```
 
+> Все ниже перечисленные функции возвращают Promise
+
 ## merchant
 
 ### merchant.get
@@ -20,7 +22,7 @@ const race = new Races("token")
 Получить информацию о вашем проекте
 
 ```ts
-const result = await race.merchant.get()
+race.merchant.get()
 ```
 
 [Пример ответа](./src/api/Response.ts#L1)
@@ -164,7 +166,7 @@ race.webhooks.create({
 Получить URL текущего вебхука
 
 ```ts
-const result = await race.webhooks.get()
+race.webhooks.get()
 ```
 
 [Пример ответа](./src/api/Response.ts#L141)
@@ -173,10 +175,12 @@ const result = await race.webhooks.get()
 
 Получать входящие платежи
 
+[Описание параметров](./src/index.ts#42)
+
 ```ts
 race.startPollingPayment(ctx => {
   console.log(ctx)
-})
+}, "https://ngrok.io")
 ```
 
 [Тип параметров функции](./src/api/Response.ts#L148)
@@ -186,7 +190,7 @@ race.startPollingPayment(ctx => {
 Получить ссылку на проект
 
 ```ts
-const result = await race.getLink()
+race.getLink()
 ```
 
 > Если нашли ошибку напишите [мне](https://t.me/swedesjs)

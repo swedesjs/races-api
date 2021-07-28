@@ -1,6 +1,6 @@
 {
   "name": "races-api",
-  "version": "1.1.1",
+  "version": "1.1.1-fix-markdown",
   "description": "SDK для Races API во ВКонтакте",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

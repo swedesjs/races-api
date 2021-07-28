@@ -157,8 +157,6 @@ race.webhooks.create({
 
 [Пример ответа](./src/api/Response.ts#L130)
 
-</details>
-
 ### webhooks.get
 
 ---
@@ -175,7 +173,7 @@ race.webhooks.get()
 
 Получать входящие платежи
 
-[Описание параметров](./src/index.ts#42)
+[Описание параметров](./src/index.ts#L42)
 
 ```ts
 race.startPollingPayment(ctx => {
